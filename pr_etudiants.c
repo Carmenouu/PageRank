@@ -249,3 +249,26 @@ void v_output( FILE *fp, VEC *v )
 }
 
 
+/* Effectue le produit d'un vecteur et d'une matrice donnés */
+VEC *product_vm( VEC *v, SMAT *M)
+{
+	u_int i, nzValue, j;
+	VEC* result = v_get(v->dim);
+	
+	if (v->dim != M->n)
+		return NULL ;
+		
+	for ( i=0 ; i<n ; i++ )
+	{
+		for ( nzValue=0 ; nzValue<M->row[i]->nnz ; nzValue++)
+		{
+			j = M->row[i]->col[nzValue];
+			result->e[j] += v->e[i]*M->row[i]->val[nzValue] ;
+		}
+		
+	}
+	
+	v_free(v);
+	return result ;
+}
+
