@@ -258,17 +258,31 @@ VEC *product_vm( VEC *v, SMAT *M)
 	if (v->dim != M->n)
 		return NULL ;
 		
-	for ( i=0 ; i<n ; i++ )
+	for ( i=0 ; i<M->n ; i++ )
 	{
-		for ( nzValue=0 ; nzValue<M->row[i]->nnz ; nzValue++)
+		for ( nzValue=0 ; nzValue<M->row[i].nnz ; nzValue++)
 		{
-			j = M->row[i]->col[nzValue];
-			result->e[j] += v->e[i]*M->row[i]->val[nzValue] ;
+			j = M->row[i].col[nzValue];
+			result->e[j] += v->e[i]*M->row[i].val[nzValue] ;
 		}
 		
 	}
 	
 	v_free(v);
 	return result ;
+}
+
+
+void sm_convert(SMAT * mat)
+{
+	int l, v ;
+	
+	for (l=0 ; l<mat->n ; l++)
+	{
+		for (v=0 ; v<mat->row[i].nnz ; v++)
+		{
+			mat->row[i].val[v] /= mat->row[i].nnz ;
+		}
+	}
 }
 
