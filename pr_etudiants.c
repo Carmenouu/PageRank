@@ -283,6 +283,14 @@ void sm_convert(SMAT * mat)
 		{
 			mat->row[l].val[v] /= mat->row[l].nnz ;
 		}
+		
+		if (mat->row[l].nnz == 0)
+		{
+			for (v=0 ; v<mat->n ; v++)
+			{
+				mat->row[l].val[v] = 1./mat->n ;
+			}
+		}
 	}
 }
 
