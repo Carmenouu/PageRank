@@ -266,6 +266,15 @@ VEC *product_vm( VEC *v, SMAT *M)
 			result->e[j] += v->e[i]*M->row[i].val[nzValue] ;
 		}
 		
+		if (M->row[i].nnz == 0)
+		{
+			for ( nzValue=0 ; nzValue<M->n ; nzValue++)
+			{
+				j = nzValue;
+				result->e[j] += v->e[i]*1./M->n ;
+			}
+		}
+		
 	}
 	
 	v_free(v);
@@ -282,14 +291,6 @@ void sm_convert(SMAT * mat)
 		for (v=0 ; v<mat->row[l].nnz ; v++)
 		{
 			mat->row[l].val[v] /= mat->row[l].nnz ;
-		}
-		
-		if (mat->row[l].nnz == 0)
-		{
-			for (v=0 ; v<mat->n ; v++)
-			{
-				mat->row[l].val[v] = 1./mat->n ;
-			}
 		}
 	}
 }
