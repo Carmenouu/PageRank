@@ -279,9 +279,9 @@ void sm_convert(SMAT * mat)
 	
 	for (l=0 ; l<mat->n ; l++)
 	{
-		for (v=0 ; v<mat->row[i].nnz ; v++)
+		for (v=0 ; v<mat->row[l].nnz ; v++)
 		{
-			mat->row[i].val[v] /= mat->row[i].nnz ;
+			mat->row[l].val[v] /= mat->row[l].nnz ;
 		}
 	}
 }

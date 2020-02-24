@@ -3,15 +3,26 @@
 int main()
 {
   FILE *fp;
-  SMAT *SM;
+  SMAT *H;
+  VEC  *r;
 
-  fp = fopen( "exemple.dat", "r" );
-  SM = sm_input( fp );
+  fp = fopen( "exemple2.dat", "r" );
+  H = sm_input( fp );
   fclose( fp );
+  sm_output( stdout, H );
+  sm_convert(H);
+  sm_output( stdout, H );
 
-  sm_output( stdout, SM );
+  r = v_get(3);
+  r->e[0] = 1./3;
+  r->e[1] = 1./3;
+  r->e[2] = 1./3;
 
-  sm_free( SM );
+  v_output(stdout, r);
+
+  printf("multiplication :\n");
+  r = product_vm(r, H);
+  v_output(stdout, r);
 
   return 0;
 }
