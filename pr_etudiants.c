@@ -266,19 +266,59 @@ VEC *product_vm( VEC *v, SMAT *M)
 			result->e[j] += v->e[i]*M->row[i].val[nzValue] ;
 		}
 		
-		if (M->row[i].nnz == 0)
+		/*if (M->row[i].nnz == 0)
 		{
 			for ( nzValue=0 ; nzValue<M->n ; nzValue++)
 			{
 				j = nzValue;
 				result->e[j] += v->e[i]*1./M->n ;
 			}
-		}
+		}*/
 		
 	}
 	
 	v_free(v);
 	return result ;
+}
+
+/* Effectue la multiplication vectorielle entre le vecteur d'importance r
+et le vecteur des points avsorbants a */
+double  product_vv( VEC *r, VEC *a)
+{
+  double  resultat = 0;
+
+  if (r->dim != a->dim)
+    return 0 ;
+
+  for (int i = 0; i < r->dim; i++)
+  {
+    resultat += r->e[i] * a->e[i];
+  }
+
+  return (resultat);
+}
+
+
+/* Calcule une itération du vecteur d'importance */
+VEC * new_r( VEC * r, SMAT * H, VEC * a, double alpha)
+{
+  VEC * new_r;
+  double  coefAbsorbants;
+
+  if (r == NULL || H == NULL || alpha < 0 || alpha > 1 )
+    return NULL;
+
+  if (!((r->dim == H->n) && (r->dim == a->dim)))
+    return NULL;
+
+  coefAbsorbants = product_vv(r, a);
+  new_r = product_vm(r, H);
+  for (int i = 0; i < new_r->dim; i++)
+  {
+    new_r->e[i] = alpha * new_r->e[i] + (alpha * coefAbsorbants + 1 - alpha) / H->n;
+  }
+
+  return new_r;
 }
 
 
